@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="header">
+    <span class="version">2025-05-25.1x</span>
+    <input [value]="repoOwner" type="text" placeholder="Repo Owner" disabled>
+    <input [value]="repo" type="text" placeholder="Repo Name" disabled>
+  </div>
+
+  <div class="status">
+    上次打卡：{{ lastCheckinDisplay() }}
+  </div>
+
+  <button 
+    (click)="updateFile()" 
+    [disabled]="isTodayClicked">
+    @if (!isTodayClicked) {
+      <span>Commit!</span>
+    } @else {
+      <span>Done for Today!</span>
+    }
+  </button>
+
+  @if (message) {
+    <div class="message success">{{ message }}</div>
+  }
+
+  @if (error) {
+    <div class="message error">{{ error }}</div>
+  }
+</div>
