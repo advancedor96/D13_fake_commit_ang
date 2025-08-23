@@ -7,29 +7,38 @@ const app = express();
 app.use(express.json());  // 處理 JSON 格式的請求體
 app.use(express.urlencoded({ extended: true }));  // 處理 URL-encoded 格式的請求體
 
+// 添加測試路由來確認 API 是否正常運作
+app.get('/api/test', (req, res) => {
+  res.json({
+    message: 'API is working',
+    env: {
+      hasGithubToken: !!process.env.GITHUB_TOKEN,
+      hasGithubOwner: !!process.env.GITHUB_REPO_OWNER,
+      nodeEnv: process.env.NODE_ENV
+    }
+  });
+});
 
-// 導入路由模組
 const getLastCheckin = require('./getLastCheckin');
 const updateFile = require('./updateFile');
 
-// 提供 Angular 靜態文件
 app.use(express.static(path.join(__dirname, 'frontend/dist/browser')));
 
-// API 路由
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from API 1!' });
-});
 
 app.use('/api', getLastCheckin);
 app.use('/api', updateFile);
 
-// 其他路由轉到 Angular 的 index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/browser/index.html'));
 });
 
 // 啟動服務器
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+if (process.env.VERCEL) {
+  console.log('Running on Vercel...');
+  module.exports = app;
+} else {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}

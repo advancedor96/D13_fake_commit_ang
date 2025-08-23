@@ -19,5 +19,8 @@
       "src": "/(.*)",
       "dest": "frontend/dist/browser/$1"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
