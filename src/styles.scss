@@ -1,0 +1,29 @@
+// 基本設定
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// 自定義變數
+:root {
+  --primary-color: #006eff;  // azure-blue 主色調
+  --accent-color: #69f0ae;   // azure-blue 強調色
+  --warn-color: #f44336;     // 警告色
+  --success-color: #4caf50;  // 成功色
+}
+
+// Material Design Snackbar 樣式
+.mat-mdc-snack-bar-container {
+  &.success-snackbar {
+    --mdc-snackbar-container-color: var(--success-color);
+    --mat-mdc-snack-bar-button-color: white;
+    --mdc-snackbar-supporting-text-color: white;
+  }
+
+  &.error-snackbar {
+    --mdc-snackbar-container-color: var(--warn-color);
+    --mat-mdc-snack-bar-button-color: white;
+    --mdc-snackbar-supporting-text-color: white;
+  }
+}

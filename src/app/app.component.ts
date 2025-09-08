@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 interface GeoData {
   city: string;
@@ -9,7 +15,7 @@ interface GeoData {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatToolbarModule, MatCardModule, MatProgressSpinnerModule, MatSnackBarModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -23,7 +29,7 @@ export class AppComponent implements OnInit {
   geo: GeoData = { city: ''};
   lastCheckin = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.getLastCheckin();
@@ -60,9 +66,10 @@ export class AppComponent implements OnInit {
   }
 
   getLastCheckin() {
-    this.http.get<any>('/api/getLastCheckin').subscribe({
+    this.http.get<any>('http://34.60.79.153:8080/getLastCheckin').subscribe({
       next: (response) => {
-        console.log('Last checkin:', response);
+      // 在這裡先 log 出完整的回應
+        console.log('Raw 完整的回應:', response);
         this.lastCheckin = response.lastLine || '';
 
         // 檢查日期了
@@ -104,7 +111,7 @@ export class AppComponent implements OnInit {
 
 
   updateFile() {
-    if (this.loading ) return;
+    if (this.loading) return;
 
     this.loading = true;
     this.message = '';
@@ -114,16 +121,22 @@ export class AppComponent implements OnInit {
       city: this.geo.city || '',
     };
 
-    this.http.post<any>('/api/updateFile', data).subscribe({
+    this.http.post<any>('http://34.60.79.153:8080/updateFile', data).subscribe({
       next: (response) => {
-        console.log('Update response:', response);
         this.message = response.message;
+        this.snackBar.open('打卡成功！', '關閉', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
         this.isTodayClicked = true;
         this.getLastCheckin();
       },
       error: (error) => {
-        console.error('Error:', error);
         this.error = 'Failed to commit: ' + (error.error?.statusMessage || error.message);
+        this.snackBar.open(this.error, '關閉', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
       },
       complete: () => {
         this.loading = false;

@@ -1,0 +1,63 @@
+<div class="app-container">
+  <mat-toolbar color="primary">
+    <span>Fake Commit</span>
+  </mat-toolbar>
+
+  <div class="content">
+    <!-- 上次打卡資訊 -->
+    <mat-card class="info-card">
+      <mat-card-content>
+        <div class="last-checkin">
+          <mat-icon>schedule</mat-icon>
+          <span class="label">上次打卡：</span>
+          <span class="value">{{ lastCheckinDisplay() }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- 打卡按鈕 -->
+    <button mat-fab
+            class="checkin-button"
+            [class.checked]="isTodayClicked"
+            [disabled]="loading || isTodayClicked"
+            (click)="updateFile()">
+      @if (loading) {
+        <mat-spinner diameter="42"></mat-spinner>
+      } @else if (!isTodayClicked) {
+        <span class="words">Commit</span>
+      } @else {
+        <span class="words">Done</span>
+      }
+    </button>
+
+    <!-- 狀態文字 -->
+    <div class="status-text">
+      @if (loading) {
+        <span>打卡中...</span>
+      } @else if (isTodayClicked) {
+        <span>今日已打卡</span>
+      } @else {
+        <span>點擊按鈕打卡</span>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- 訊息提示 -->
+@if (message) {
+  <mat-snack-bar-container>
+    <div class="success-snackbar">
+      <mat-icon>check_circle</mat-icon>
+      {{ message }}
+    </div>
+  </mat-snack-bar-container>
+}
+
+@if (error) {
+  <mat-snack-bar-container>
+    <div class="error-snackbar">
+      <mat-icon>error</mat-icon>
+      {{ error }}
+    </div>
+  </mat-snack-bar-container>
+}
