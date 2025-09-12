@@ -16,19 +16,21 @@
     </mat-card>
 
     <!-- 打卡按鈕 -->
-    <button mat-fab
-            class="checkin-button"
-            [class.checked]="isTodayClicked"
-            [disabled]="loading || isTodayClicked"
-            (click)="updateFile()">
-      @if (loading) {
-        <mat-spinner diameter="42"></mat-spinner>
-      } @else if (!isTodayClicked) {
-        <span class="words">Commit</span>
-      } @else {
-        <span class="words">Done</span>
-      }
-    </button>
+    <div (dblclick)="updateFile()">
+      <button mat-fab
+              class="checkin-button"
+              [class.checked]="isTodayClicked"
+              [disabled]="loading"
+              (click)="updateFile()">
+        @if (loading) {
+          <mat-spinner diameter="42"></mat-spinner>
+        } @else if (!isTodayClicked) {
+          <span class="words">Commit</span>
+        } @else {
+          <span class="words">Done</span>
+        }
+      </button>
+    </div> 
 
     <!-- 狀態文字 -->
     <div class="status-text">
@@ -40,7 +42,11 @@
         <span>點擊按鈕打卡</span>
       }
     </div>
+    <div #calendarContainer class="calendar">
+      Loading the data just for you...
+    </div>
   </div>
+
 </div>
 
 <!-- 訊息提示 -->

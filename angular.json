@@ -33,6 +33,7 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
+              "https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css",
               "src/styles.scss"
             ],
             "scripts": [],

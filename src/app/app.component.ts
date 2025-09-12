@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+// @ts-ignore
+import GitHubCalendar from 'github-calendar';
+import { finalize } from 'rxjs';
 
 interface GeoData {
   city: string;
@@ -19,7 +22,9 @@ interface GeoData {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild('calendarContainer') calendarEl!: ElementRef;
+
   repoOwner = 'advancedor96';
   repo = 'udemy_1007';
   loading = false;
@@ -30,6 +35,16 @@ export class AppComponent implements OnInit {
   lastCheckin = '';
 
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+
+  ngAfterViewInit() {
+    console.log('View is ready');
+    GitHubCalendar(this.calendarEl.nativeElement, 'advancedor96', {
+      responsive: true,  // 讓它適應容器大小
+      tooltips: false,    // 滑鼠懸停顯示細節
+      global_stats: false // 顯示總計、連續貢獻等統計
+    });
+
+  }
 
   ngOnInit() {
     this.getLastCheckin();
@@ -66,7 +81,13 @@ export class AppComponent implements OnInit {
   }
 
   getLastCheckin() {
-    this.http.get<any>('https://proj-expired-1111.duckdns.org/getLastCheckin').subscribe({
+    this.loading = true;
+    this.http.get<any>('https://proj-expired-1111.duckdns.org/getLastCheckin').pipe(
+      finalize(() => {
+      this.loading = false;
+      })
+    )
+    .subscribe({
       next: (response) => {
       // 在這裡先 log 出完整的回應
         console.log('Raw 完整的回應:', response);
@@ -112,7 +133,7 @@ export class AppComponent implements OnInit {
 
   updateFile() {
     if (this.loading) return;
-
+    console.log('再次執行');
     this.loading = true;
     this.message = '';
     this.error = '';
