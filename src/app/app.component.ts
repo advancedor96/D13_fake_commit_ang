@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
   }
 
   getLastCheckin() {
-    this.http.get<any>('http://34.60.79.153:8080/getLastCheckin').subscribe({
+    this.http.get<any>('https://proj-expired-1111.duckdns.org/getLastCheckin').subscribe({
       next: (response) => {
       // 在這裡先 log 出完整的回應
         console.log('Raw 完整的回應:', response);
@@ -121,7 +121,7 @@ export class AppComponent implements OnInit {
       city: this.geo.city || '',
     };
 
-    this.http.post<any>('http://34.60.79.153:8080/updateFile', data).subscribe({
+    this.http.post<any>('https://proj-expired-1111.duckdns.org/updateFile', data).subscribe({
       next: (response) => {
         this.message = response.message;
         this.snackBar.open('打卡成功！', '關閉', {
