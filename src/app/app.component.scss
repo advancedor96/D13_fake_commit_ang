@@ -123,6 +123,50 @@
     }
   }
 }
+
+::ng-deep { 
+  caption{
+    display: none;
+  }
+  a[href="#year-link-2025"]{
+    display: none;
+  } 
+  div.width-full.f6.px-0.px-md-5.py-1{
+    display: none;
+  }
+  td.ContributionCalendar-day{
+    width: 10px !important;
+  }
+  .ContributionCalendar-day, .ContributionCalendar-day[data-level="0"]{
+    fill:#eff2f5;
+    shape-rendering: geometricPrecision;
+    background-color: #eff2f5;
+    border-radius: 2px;
+    border: .5px solid #1f23280d;
+  }
+  .ContributionCalendar-day[data-level="1"] {
+      fill: #aceebb;
+      background-color: #aceebb;
+      border-color: #1f23280d;
+  }
+  .ContributionCalendar-day[data-level="2"] {
+      fill: #4ac26b;
+      background-color: #4ac26b;
+      border-color: #1f23280d;
+  }
+  .ContributionCalendar-day[data-level="3"] {
+      fill: #2da44e;
+      background-color: #2da44e;
+      border-color: #1f23280d;
+  }
+  .ContributionCalendar-day[data-level="4"] {
+      fill: #116329;
+      background-color: #116329;
+      border-color: #1f23280d;
+  }
+}
+
 .calendar {
   max-width: 100%;
 }
+
