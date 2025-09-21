@@ -43,7 +43,17 @@ export class AppComponent implements OnInit, AfterViewInit {
       tooltips: false,    // 滑鼠懸停顯示細節
       global_stats: false // 顯示總計、連續貢獻等統計
     });
-
+    
+    // 添加這段：等 calendar 載入完成後，自動捲動到最右邊
+    setTimeout(() => {
+      const calendarElement = this.calendarEl.nativeElement.querySelector('.js-calendar-graph > div');
+      if (calendarElement) {
+        calendarElement.scrollLeft = calendarElement.scrollWidth;
+        console.log('捲動元素：', calendarElement);
+      } else {
+        console.log('找不到目標元素');
+      }
+    }, 1000);  // 給一些時間讓日曆完全載入
   }
 
   ngOnInit() {
@@ -98,7 +108,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         if (match) {
           const lastCheckinDate = match[1];
 
-          const today = new Date().toISOString().split('T')[0];
+          const today = new Date().toLocaleDateString('en-US', { 
+            timeZone: 'Europe/Warsaw',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }).split('/').reverse().join('-');
           
           // 比較日期
           this.isTodayClicked = (lastCheckinDate === today);
