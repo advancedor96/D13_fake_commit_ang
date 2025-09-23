@@ -49,7 +49,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       const calendarElement = this.calendarEl.nativeElement.querySelector('.js-calendar-graph > div');
       if (calendarElement) {
         calendarElement.scrollLeft = calendarElement.scrollWidth;
-        console.log('捲動元素：', calendarElement);
       } else {
         console.log('找不到目標元素');
       }
@@ -103,23 +102,18 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log('Raw 完整的回應:', response);
         this.lastCheckin = response.lastLine || '';
 
-        // 檢查日期了
-        const match = this.lastCheckin.match(/^(\d{4}-\d{2}-\d{2})/);
-        if (match) {
-          const lastCheckinDate = match[1];
+        const lastCheckinDate = response.lastDate.split(' ')[0];
 
-          const today = new Date().toLocaleDateString('en-US', { 
-            timeZone: 'Europe/Warsaw',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-          }).split('/').reverse().join('-');
-          
-          // 比較日期
-          this.isTodayClicked = (lastCheckinDate === today);
-        } else {
-          this.isTodayClicked = false;
-        }
+        const warsawDate = new Intl.DateTimeFormat('en-CA', {
+          timeZone: 'Europe/Warsaw',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).format(new Date());
+        console.log('當下時間:', warsawDate);
+        this.isTodayClicked = (warsawDate === lastCheckinDate);
+
+
       },
       error: (error) => {
         console.error('Error:', error);
